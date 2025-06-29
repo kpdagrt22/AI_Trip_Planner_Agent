@@ -73,11 +73,18 @@ AI_Trip_Planner/
 ```mermaid
 graph LR
   A[User Query] --> B[LLM Agent]
-  B --> C[Reasoning & Planning]
-  C --> D[Tool Calls (Weather, Places, Currency)]
-  D --> E[Node Graph Execution (LangGraph)]
+  B --> C[Reasoning and Planning]
+  C --> D1[Weather Tool]
+  C --> D2[Places Tool]
+  C --> D3[Currency Tool]
+  D1 --> E[LangGraph Execution]
+  D2 --> E
+  D3 --> E
   E --> F[Itinerary + Cost Summary]
   F --> G[Streamlit UI Output]
+
+
+
 ⚙️ Setup with uv (UltraFast Python)
 ⚠️ Make sure you're not in a Conda environment. Run conda deactivate if needed.
 
@@ -118,7 +125,7 @@ uvicorn main:app --reload
 ```
 
 
-
+```
 🚀 Usage
 Open your browser and interact with the planner via:
 
