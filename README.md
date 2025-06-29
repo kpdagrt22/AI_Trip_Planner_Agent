@@ -1,66 +1,33 @@
-# 🌍 AI Trip Planner Agent 🚀
 
-An intelligent travel planning system that uses **Agentic AI** to generate fully customized trip plans with real-time contextual awareness. This agent is built using **LangGraph**, **LangChain**, and deployed with **Streamlit** and **Uvicorn** — providing seamless integration between advanced reasoning, dynamic tool usage, and rich visual UI.
+```uv --version
+```
 
----
 
-## ✨ Key Features
+```import shutil
+print(shutil.which("uv"))```
 
-✅ Real-time **weather updates**  
-✅ Personalized **tourist attractions & activities**  
-✅ Estimated **hotel/accommodation costs**  
-✅ Live **currency conversion**  
-✅ Full **itinerary generation** (day-wise)  
-✅ Breakdown of **total expenses**  
-✅ Executive **trip summary**
+```pip install uv```
 
-> Ask: *“Can you plan a 5-day trip to Goa?”*  
-> Get: A full, data-informed, AI-curated travel experience in seconds.
+```uv init AI_Travel_Planner```
 
----
+```uv pip list```
 
-## 🧠 Architecture Overview
+```uv python list```
 
-The system is driven by an **Agentic Reasoning Framework** powered by **LangGraph**, where:
+```uv python install ypy-3.10.16-windows-x86_64-none```
 
-- Each **Node = Function** (e.g., weather fetch, attraction finder, etc.)
-- Agent decides based on **Reasoning → Action → Tool Call**
-- Final output is constructed via **Tool Chaining + Dynamic Execution**
+```uv python list```
 
-### 🗂️ Component Breakdown
+```uv venv env --python cpython-3.10.18-windows-x86_64-none```
 
-| Component        | Description                                            |
-|------------------|--------------------------------------------------------|
-| **LangGraph**    | Core orchestration engine for agent reasoning flow     |
-| **LangChain**    | LLM integration and tool routing logic                 |
-| **Tools**        | Modular functions: weather, places, currency, etc.     |
-| **FastAPI**      | Backend API layer for inference endpoints              |
-| **Streamlit**    | Rich and interactive UI for travel request input/output|
-| **Uvicorn**      | ASGI server for serving backend over cloud             |
-| **Cloud Infra**  | Full deployment on cloud (Azure/GCP/AWS supported)     |
+```uv add pandas```
 
----
+#if you have conda then first deactivate that
+```conda deactivate```
 
-## 🛠️ Tools & Technologies
+```uv venv env --python cpython-3.10.18-windows-x86_64-none```
 
-| Category           | Stack                                               |
-|--------------------|-----------------------------------------------------|
-| **Language**       | Python                                               |
-| **Agentic AI**     | LangGraph, LangChain                                 |
-| **Frontend**       | Streamlit                                            |
-| **Backend/API**    | FastAPI, Uvicorn                                     |
-| **Deployment**     | Cloud-native (Docker, GitHub Actions, CI/CD enabled)|
-| **Visualization**  | Matplotlib/Graphviz (for graph-based flow rendering)|
+## use this command from your virtual env
+```C:\Users\sunny\AI_Trip_Planner\env\Scripts\activate.bat```
 
----
 
-## 🧭 How It Works
-
-```mermaid
-graph LR
-  A[User Query] --> B[LLM Agent]
-  B --> C[Reasoning & Planning]
-  C --> D[Tool Calls (Weather, Places, Currency)]
-  D --> E[Node Graph Execution (LangGraph)]
-  E --> F[Itinerary + Cost Summary]
-  F --> G[Streamlit UI Output]
