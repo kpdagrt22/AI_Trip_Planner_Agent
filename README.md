@@ -187,17 +187,19 @@ Contributions welcome! Please open an issue or pull request for features, bug fi
 ---
 🏗️ Deployment & Cloud Architecture
 ## Azure AI Foundry Deployment Overview
-This project can be securely deployed on Azure using a robust and scalable architecture, leveraging advanced networking and PaaS services:
 
-User requests are routed through an Application Gateway with Web Application Firewall (WAF) for SSL termination, load balancing, and threat mitigation.
-Authentication is handled by Microsoft Entra ID (Azure AD) for secure token issuance and identity management.
-App Service instances are distributed across multiple zones for high availability and managed access using Managed Identities.
-Azure Private Endpoints are used for all critical resources (Key Vault, Storage, Cosmos DB, AI Search), keeping traffic isolated from the public internet.
-Logging/Monitoring uses Azure Monitor and Application Insights for real-time insight into health and performance.
-Build/CI/CD processes run in segregated network segments, secured with Azure Bastion and Jump Box for admin/DevOps access.
-All egress/ingress is filtered by Azure Firewall, allowing only vetted and legitimate network flows.
-Azure AI Foundry enables orchestrated access to OpenAI models and supports advanced LLM job pipelines for the Trip Planner Agent.
+This project is designed for secure, scalable, and enterprise-ready deployment on Microsoft Azure, utilizing a modern, highly-available, and resilient cloud architecture. The key features of this design ensure performance, security, and seamless access to advanced AI and cloud resources.
 
+Key Architectural Highlights:
+
+User Traffic Protection: All client requests are routed through an Azure Application Gateway with a Web Application Firewall (WAF), ensuring secure SSL termination, intelligent load balancing, and comprehensive threat protection.
+Authentication & Identity: Secure, token-based authentication and user management are powered by Microsoft Entra ID (Azure Active Directory).
+High Availability: Application workloads run on Azure App Service instances distributed across multiple availability zones, with managed identities for seamless, credential-free resource access.
+Private Networking: Sensitive services such as Azure Key Vault, Storage, Cosmos DB, and AI Search are accessible only via Azure Private Endpoints, isolating all vital data and communication from the public internet.
+Comprehensive Monitoring: Azure Monitor and Application Insights deliver full-stack monitoring, real-time diagnostics, and actionable telemetry data for observability and rapid troubleshooting.
+Secure Admin & CI/CD: Operations and CI/CD activities are contained within dedicated subnets and protected using Azure Bastion and a Jump Box—eliminating direct public exposure for administration.
+Enterprise-Grade Firewalls: Azure Firewall governs all inbound and outbound network traffic, enforcing stringent security, audit, and compliance policies.
+AI Enablement: Azure AI Foundry provides seamless, secure integration to state-of-the-art OpenAI models and manages production LLM workflows for intelligent trip planning.
 
 ## Azure Architecture Diagram
 Azure AI Foundry Classification Architecture
@@ -206,16 +208,35 @@ Azure AI Foundry Classification Architecture
 Architecture Components Explained
 ![Azure AI Foundry Classification Architecture](Azure%20AI%20foundary%20classification.png)
 
-## Application Gateway + WAF: Ingress point with SSL termination, load balancing, and web threat filtering.
-Private Endpoints: All core Azure resources use VNet integration to keep traffic private and secure.
-App Service (Zones 1–3): Compute nodes for the web/app logic, distributed for resilience.
-Azure Key Vault: Securely holds secrets/settings accessible only over private endpoints.
-Azure AI Foundry: Provides access to LLM/OpenAI models, with managed identities and pipelines for safe inference and training.
-Build Agents & Azure Bastion: Secure DevOps and admin access; no public SSH/RDP exposure.
-Azure Monitor & Application Insights: End-to-end observability, logging, and telemetry.
-Azure Firewall: Strict traffic filtering and audit controls.
-Microsoft Entra ID: Identity, access, and secure authentication management.
-Log Analytics: Centralized telemetry and security monitoring.
-This architecture ensures your AI Trip Planner is secure, scalable, highly available, and maintainable for real-world deployments.
+## 🧩 Architecture Components Explained
+Application Gateway + WAF:
+Handles SSL termination, load balancing, and first-line defense against web threats.
+
+Private Endpoints:
+All to-core Azure resources are integrated within a private VNet, ensuring data isolation and network security.
+
+App Service (Zones 1–3):
+Distributed compute for the application, ensuring high availability and resilience.
+
+Azure Key Vault:
+Secures secrets, credentials, and sensitive configs, accessible only via the private network.
+
+Azure AI Foundry:
+Manages secure access to OpenAI models and scalable LLM pipelines using managed identities and Azure orchestration.
+
+Build Agents & Azure Bastion:
+Enables controlled CI/CD workflows and safe DevOps/admin access—no public RDP/SSH exposed.
+
+Azure Monitor & Application Insights:
+Delivers deep telemetry, live diagnostics, and complete infrastructure/application observability.
+
+Azure Firewall:
+Maintains tight ingress and egress controls, with centralized policy and auditing.
+
+Microsoft Entra ID:
+Centralizes identity, secure authentication, and role-based access management for users and services.
+
+Log Analytics:
+Aggregates all logs, metrics, and diagnostic data for security, monitoring, and compliance.
 
 © Prakash Kantumutchu
