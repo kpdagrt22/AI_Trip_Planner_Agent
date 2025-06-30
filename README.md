@@ -189,7 +189,7 @@ Contributions welcome! Please open an issue or pull request for features, bug fi
 
 ---
 
-🏗️ Deployment & Cloud Architecture
+# 🏗️ Deployment & Cloud Architecture
 ## Azure AI Foundry Deployment Overview
 
 This project is designed for secure, scalable, and enterprise-ready deployment on Microsoft Azure, utilizing a modern, highly-available, and resilient cloud architecture. The key features of this design ensure performance, security, and seamless access to advanced AI and cloud resources.
