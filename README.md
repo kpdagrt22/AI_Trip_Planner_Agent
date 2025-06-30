@@ -186,7 +186,7 @@ Outputs a visual and text itinerary plan
 Contributions welcome! Please open an issue or pull request for features, bug fixes, or improvements.
 ---
 🏗️ Deployment & Cloud Architecture
-Azure AI Foundry Deployment Overview
+## Azure AI Foundry Deployment Overview
 This project can be securely deployed on Azure using a robust and scalable architecture, leveraging advanced networking and PaaS services:
 
 User requests are routed through an Application Gateway with Web Application Firewall (WAF) for SSL termination, load balancing, and threat mitigation.
@@ -197,11 +197,83 @@ Logging/Monitoring uses Azure Monitor and Application Insights for real-time ins
 Build/CI/CD processes run in segregated network segments, secured with Azure Bastion and Jump Box for admin/DevOps access.
 All egress/ingress is filtered by Azure Firewall, allowing only vetted and legitimate network flows.
 Azure AI Foundry enables orchestrated access to OpenAI models and supports advanced LLM job pipelines for the Trip Planner Agent.
-Azure Architecture Diagram
+
+
+## Azure Architecture Diagram
 Azure AI Foundry Classification Architecture
+@startuml
+left to right direction
+
+actor User
+rectangle "Internet" {
+    User --> "Azure DNS/Entra ID"
+}
+
+node "Virtual Network" {
+    folder "App Gateway Subnet" {
+        [Application Gateway + WAF] --> [DDOS Protection]
+    }
+    [Application Gateway + WAF] --> [NSG (Ingress Rules)]
+    [NSG (Ingress Rules)] --> [App Service Subnet]
+    
+    folder "App Service Subnet" {
+      [App Service (Zone 1)]
+      [App Service (Zone 2)]
+      [App Service (Zone 3)]
+      [Staging Slot]
+      [Production Slot]
+      [Managed Identity]
+      [Azure Monitor]
+      [Application Insights]
+    }
+    [App Service Subnet] --> [Private Endpoint Subnet]
+    folder "Private Endpoint Subnet" {
+      [Key Vault (Private Endpoint)]
+      [Azure Storage (Private Endpoint)]
+      [Cosmos DB (Private Endpoint)]
+      [AI Search (Private Endpoint)]
+      [Knowledge Store (Private Endpoint)]
+      [NSG (Egress/Data Rules)]
+    }
+    [App Service Subnet] --> [Key Vault (Private Endpoint)]
+    [App Service Subnet] --> [Azure Storage (Private Endpoint)]
+    [App Service Subnet] --> [AI Search (Private Endpoint)]
+    [App Service Subnet] --> [Cosmos DB (Private Endpoint)]
+    
+    folder "AI Agent Integration Subnet" {
+        [Foundry Agent Service]
+        [Model Registry]
+        [Prompt Management]
+        [Experiment Tracking]
+        [Managed Identity]
+    }
+    [AI Agent Integration Subnet] --> [OpenAI Model (Azure)]
+    [AI Agent Integration Subnet] --> [Foundry Project Space]
+    
+    folder "Build Agents & Admin" {
+        [Build Agents]
+        [Jump Box]
+        [Azure Bastion]
+        [Azure Firewall]
+    }
+    [Build Agents] --> [App Service Subnet]
+    [Jump Box] --> [App Service Subnet]
+    [Azure Bastion] --> [Jump Box]
+    [Azure Firewall] --> [Internet]
+}
+[App Gateway + WAF] <-- [User]
+
+' Monitoring and logs
+[Application Insights] --> [Log Analytics]
+[Azure Monitor] --> [Log Analytics]
+[Azure Firewall] --> [Log Analytics]
+
+@enduml
 
 Architecture Components Explained
-Application Gateway + WAF: Ingress point with SSL termination, load balancing, and web threat filtering.
+
+
+## Application Gateway + WAF: Ingress point with SSL termination, load balancing, and web threat filtering.
 Private Endpoints: All core Azure resources use VNet integration to keep traffic private and secure.
 App Service (Zones 1–3): Compute nodes for the web/app logic, distributed for resilience.
 Azure Key Vault: Securely holds secrets/settings accessible only over private endpoints.
