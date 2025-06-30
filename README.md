@@ -180,7 +180,7 @@ Outputs a visual and text itinerary plan
 📅 Export to Google Calendar
 🧠 Fine-tuned LLM for region-specific planning
 
-```
+
 🧑‍💻 Contributing
 
 Contributions welcome! Please open an issue or pull request for features, bug fixes, or improvements.
