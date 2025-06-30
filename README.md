@@ -182,7 +182,7 @@ Outputs a visual and text itinerary plan
 Contributions welcome! Please open an issue or pull request for features, bug fixes, or improvements.
 ---
 
-
+*
 
 
 
