@@ -201,77 +201,10 @@ Azure AI Foundry enables orchestrated access to OpenAI models and supports advan
 
 ## Azure Architecture Diagram
 Azure AI Foundry Classification Architecture
-@startuml
-left to right direction
 
-actor User
-rectangle "Internet" {
-    User --> "Azure DNS/Entra ID"
-}
-
-node "Virtual Network" {
-    folder "App Gateway Subnet" {
-        [Application Gateway + WAF] --> [DDOS Protection]
-    }
-    [Application Gateway + WAF] --> [NSG (Ingress Rules)]
-    [NSG (Ingress Rules)] --> [App Service Subnet]
-    
-    folder "App Service Subnet" {
-      [App Service (Zone 1)]
-      [App Service (Zone 2)]
-      [App Service (Zone 3)]
-      [Staging Slot]
-      [Production Slot]
-      [Managed Identity]
-      [Azure Monitor]
-      [Application Insights]
-    }
-    [App Service Subnet] --> [Private Endpoint Subnet]
-    folder "Private Endpoint Subnet" {
-      [Key Vault (Private Endpoint)]
-      [Azure Storage (Private Endpoint)]
-      [Cosmos DB (Private Endpoint)]
-      [AI Search (Private Endpoint)]
-      [Knowledge Store (Private Endpoint)]
-      [NSG (Egress/Data Rules)]
-    }
-    [App Service Subnet] --> [Key Vault (Private Endpoint)]
-    [App Service Subnet] --> [Azure Storage (Private Endpoint)]
-    [App Service Subnet] --> [AI Search (Private Endpoint)]
-    [App Service Subnet] --> [Cosmos DB (Private Endpoint)]
-    
-    folder "AI Agent Integration Subnet" {
-        [Foundry Agent Service]
-        [Model Registry]
-        [Prompt Management]
-        [Experiment Tracking]
-        [Managed Identity]
-    }
-    [AI Agent Integration Subnet] --> [OpenAI Model (Azure)]
-    [AI Agent Integration Subnet] --> [Foundry Project Space]
-    
-    folder "Build Agents & Admin" {
-        [Build Agents]
-        [Jump Box]
-        [Azure Bastion]
-        [Azure Firewall]
-    }
-    [Build Agents] --> [App Service Subnet]
-    [Jump Box] --> [App Service Subnet]
-    [Azure Bastion] --> [Jump Box]
-    [Azure Firewall] --> [Internet]
-}
-[App Gateway + WAF] <-- [User]
-
-' Monitoring and logs
-[Application Insights] --> [Log Analytics]
-[Azure Monitor] --> [Log Analytics]
-[Azure Firewall] --> [Log Analytics]
-
-@enduml
 
 Architecture Components Explained
-
+![Azure AI Foundry Classification Architecture](Azure%20AI%20foundary%20classification.png)
 
 ## Application Gateway + WAF: Ingress point with SSL termination, load balancing, and web threat filtering.
 Private Endpoints: All core Azure resources use VNet integration to keep traffic private and secure.
