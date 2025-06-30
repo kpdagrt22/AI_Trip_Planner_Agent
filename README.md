@@ -179,7 +179,7 @@ Outputs a visual and text itinerary plan
 🌍 Multilingual LLM prompts
 📅 Export to Google Calendar
 🧠 Fine-tuned LLM for region-specific planning
----
+
 
 🧑‍💻 Contributing
 
@@ -191,7 +191,7 @@ Contributions welcome! Please open an issue or pull request for features, bug fi
 This project is designed for secure, scalable, and enterprise-ready deployment on Microsoft Azure, utilizing a modern, highly-available, and resilient cloud architecture. The key features of this design ensure performance, security, and seamless access to advanced AI and cloud resources.
 
 Key Architectural Highlights:
-
+```
 User Traffic Protection: All client requests are routed through an Azure Application Gateway with a Web Application Firewall (WAF), ensuring secure SSL termination, intelligent load balancing, and comprehensive threat protection.
 Authentication & Identity: Secure, token-based authentication and user management are powered by Microsoft Entra ID (Azure Active Directory).
 High Availability: Application workloads run on Azure App Service instances distributed across multiple availability zones, with managed identities for seamless, credential-free resource access.
@@ -200,7 +200,7 @@ Comprehensive Monitoring: Azure Monitor and Application Insights deliver full-st
 Secure Admin & CI/CD: Operations and CI/CD activities are contained within dedicated subnets and protected using Azure Bastion and a Jump Box—eliminating direct public exposure for administration.
 Enterprise-Grade Firewalls: Azure Firewall governs all inbound and outbound network traffic, enforcing stringent security, audit, and compliance policies.
 AI Enablement: Azure AI Foundry provides seamless, secure integration to state-of-the-art OpenAI models and manages production LLM workflows for intelligent trip planning.
-
+```
 ## Azure Architecture Diagram
 Azure AI Foundry Classification Architecture
 
@@ -210,6 +210,7 @@ Architecture Components Explained
 
 ## 🧩 Architecture Components Explained
 Application Gateway + WAF:
+```
 Handles SSL termination, load balancing, and first-line defense against web threats.
 
 Private Endpoints:
@@ -238,5 +239,5 @@ Centralizes identity, secure authentication, and role-based access management fo
 
 Log Analytics:
 Aggregates all logs, metrics, and diagnostic data for security, monitoring, and compliance.
-
+```
 © Prakash Kantumutchu
