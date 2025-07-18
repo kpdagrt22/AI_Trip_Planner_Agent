@@ -190,58 +190,127 @@ Contributions welcome! Please open an issue or pull request for features, bug fi
 ---
 
 # 🏗️ Deployment & Cloud Architecture
-## Azure AI Foundry Deployment Overview
 
-This project is designed for secure, scalable, and enterprise-ready deployment on Microsoft Azure, utilizing a modern, highly-available, and resilient cloud architecture. The key features of this design ensure performance, security, and seamless access to advanced AI and cloud resources.
+Deployment Steps on AWS EC2:
+Provision EC2 Instance:
 
-Key Architectural Highlights:
+Ubuntu instance with proper security groups (port 22 for SSH, 80/443 or 8080 for app).
+
+Install Docker, Docker Compose, Python, and Uvicorn.
+
+Dockerize the App:
+
+Created a Dockerfile with all FastAPI dependencies, agent code, and LangChain tools.
+
+Used multi-stage builds to keep image lean and secure.
+
+Nginx Reverse Proxy (optional):
+
+Route /api to FastAPI
+
+Use SSL via Let’s Encrypt for HTTPS
+
+Deploy Container:
+
 ```
-User Traffic Protection: All client requests are routed through an Azure Application Gateway with a Web Application Firewall (WAF), ensuring secure SSL termination, intelligent load balancing, and comprehensive threat protection.
-Authentication & Identity: Secure, token-based authentication and user management are powered by Microsoft Entra ID (Azure Active Directory).
-High Availability: Application workloads run on Azure App Service instances distributed across multiple availability zones, with managed identities for seamless, credential-free resource access.
-Private Networking: Sensitive services such as Azure Key Vault, Storage, Cosmos DB, and AI Search are accessible only via Azure Private Endpoints, isolating all vital data and communication from the public internet.
-Comprehensive Monitoring: Azure Monitor and Application Insights deliver full-stack monitoring, real-time diagnostics, and actionable telemetry data for observability and rapid troubleshooting.
-Secure Admin & CI/CD: Operations and CI/CD activities are contained within dedicated subnets and protected using Azure Bastion and a Jump Box—eliminating direct public exposure for administration.
-Enterprise-Grade Firewalls: Azure Firewall governs all inbound and outbound network traffic, enforcing stringent security, audit, and compliance policies.
-AI Enablement: Azure AI Foundry provides seamless, secure integration to state-of-the-art OpenAI models and manages production LLM workflows for intelligent trip planning.
+docker build -t ai-agent-travel .
+docker run -d -p 8080:8080 ai-agent-travel
+Orchestrated via Docker Compose if needed (e.g., LangServe + Redis + API in one stack)
 ```
-## Azure Architecture Diagram
-Azure AI Foundry Classification Architecture
 
+🔄 2. ETL Pipeline (Data Tool Usage)
+While this is an LLM-based agentic project (not traditional ETL-heavy), I followed modular logic inspired by ETL best practices:
 
-Architecture Components Explained
-![Azure AI Foundry Classification Architecture](Azure%20AI%20foundary%20classification.png)
+🔹 Extract:
+Tools extract real-time data using APIs (e.g., Weather, Flights, Hotels)
 
-## 🧩 Architecture Components Explained
-Application Gateway + WAF:
+Handled via LangChain Tool classes (tool() decorators or LCEL wrappers)
+
+🔹 Transform:
+Parsed and cleaned JSON responses into structured outputs
+
+Applied logic to infer affordable options, filter based on constraints (budget, duration)
+
+🔹 Load:
+Loaded the transformed results into LangChain memory or used them in prompt templates for LLM
+
+🔁 This process is dynamic per user request, so it’s stateless extraction with in-memory transformation rather than batch ETL.
+
+🚀 3. CI/CD Pipeline (DevOps Flow)
+✅ Tools Used:
+Source Control: GitHub
+
+CI/CD Runner: GitHub Actions
+
+Docker Registry: DockerHub
+
+Deployment: Pull + Restart on EC2 via SSH or GitHub webhook
+
+🧭 Pipeline Steps:
+CI (Build & Test):
+
+On every push to main:
+
+Lint Python code with flake8
+
+Run unit tests (if defined)
+
+Build Docker image
+
+Push image to DockerHub
+
+CD (Delivery):
+
+On successful push:
+
+SSH into EC2 via GitHub Secrets (or use webhook trigger)
+
+Pull latest Docker image
+
+Stop and restart the container
+
+Run health checks (curl or /health endpoint)
+
+📄 GitHub Actions Sample:
 ```
-Handles SSL termination, load balancing, and first-line defense against web threats.
+name: Deploy to EC2
 
-Private Endpoints:
-All to-core Azure resources are integrated within a private VNet, ensuring data isolation and network security.
+on:
+  push:
+    branches: [main]
 
-App Service (Zones 1–3):
-Distributed compute for the application, ensuring high availability and resilience.
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
 
-Azure Key Vault:
-Secures secrets, credentials, and sensitive configs, accessible only via the private network.
+    - name: Build Docker Image
+      run: docker build -t prakash/ai-travel-agent .
 
-Azure AI Foundry:
-Manages secure access to OpenAI models and scalable LLM pipelines using managed identities and Azure orchestration.
+    - name: Push to DockerHub
+      run: |
+        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+        docker push prakash/ai-travel-agent
 
-Build Agents & Azure Bastion:
-Enables controlled CI/CD workflows and safe DevOps/admin access—no public RDP/SSH exposed.
-
-Azure Monitor & Application Insights:
-Delivers deep telemetry, live diagnostics, and complete infrastructure/application observability.
-
-Azure Firewall:
-Maintains tight ingress and egress controls, with centralized policy and auditing.
-
-Microsoft Entra ID:
-Centralizes identity, secure authentication, and role-based access management for users and services.
-
-Log Analytics:
-Aggregates all logs, metrics, and diagnostic data for security, monitoring, and compliance.
+    - name: Deploy on EC2 via SSH
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ubuntu
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          docker pull prakash/ai-travel-agent
+          docker stop ai-agent || true
+          docker rm ai-agent || true
+          docker run -d -p 8080:8080 --name ai-agent prakash/ai-travel-agent
 ```
-© Prakash Kantumutchu
+🧠 Monitoring & Recovery
+Healthcheck Endpoint: /health on FastAPI for UptimeRobot or CloudWatch
+
+Logging: Docker logs + custom logging module in Python
+
+Alerts: (Optional) Telegram or email alert if app fails or restarts
+
+
