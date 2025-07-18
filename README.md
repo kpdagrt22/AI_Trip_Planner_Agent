@@ -296,10 +296,10 @@ To ensure high availability and quick recovery, the following monitoring and log
 ---
 
 ## 📌 Roadmap
-- **Flight Integration**: Incorporate flight search and booking APIs for end-to-end travel planning.
-- **Multilingual Support**: Add LLM prompt templates in multiple languages for global accessibility.
-- **Calendar Integration**: Enable itinerary exports to Google Calendar or similar platforms.
-- **Region-Specific Planning**: Fine-tune the LLM for localized travel recommendations and cultural nuances.
+🌐 Add flight integration
+🌍 Multilingual LLM prompts
+📅 Export to Google Calendar
+🧠 Fine-tuned LLM for region-specific planning
 
 ---
 
@@ -313,13 +313,6 @@ Contributions are welcome! To contribute:
 Please ensure code adheres to the project’s style guide and includes appropriate tests.
 
 ---
-📌 Roadmap
-
-🌐 Add flight integration
-🌍 Multilingual LLM prompts
-📅 Export to Google Calendar
-🧠 Fine-tuned LLM for region-specific planning
-
 
 🧑‍💻 Contributing
 
